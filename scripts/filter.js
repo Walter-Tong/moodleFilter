@@ -31,29 +31,33 @@ async function filter() {
 
     await new Promise(resolve => setTimeout(resolve, 250));
 
-    await chrome.storage.sync.set({boxCourses: whiteListBox, sideCourses: whiteListSide, courseBox: courseNameList, sideBarCourses: sideBarCourseNameList});
+    await chrome.storage.sync.set({ boxCourses: whiteListBox, sideCourses: whiteListSide, courseBox: courseNameList, sideBarCourses: sideBarCourseNameList });
 
     console.log(whiteListBox, whiteListSide)
 
     await new Promise(resolve => setTimeout(resolve, 250));
     let offset = 0;
 
-    let timeToRun = courses.length
+    if (whiteListBox.length) {
+        let timeToRun = courses.length
 
-    for (let i = 0; i < timeToRun; i++) {
-        const courseName = courses[i - offset].getElementsByClassName("coursename")[0].children[0].innerText.substring(0, 8);
-        if (!whiteListBox.includes(courseName)) {
-            courses[i - offset].remove();
-            offset++;
+        for (let i = 0; i < timeToRun; i++) {
+            const courseName = courses[i - offset].getElementsByClassName("coursename")[0].children[0].innerText.substring(0, 8);
+            if (!whiteListBox.includes(courseName)) {
+                courses[i - offset].remove();
+                offset++;
+            }
         }
     }
 
-    timeToRun = sideBarCourses.length;
+    if (whiteListSide.length) {
+        timeToRun = sideBarCourses.length;
 
-    for (let i = 0; i < timeToRun; i++) {
-        const courseName = sideBarCourses[i].innerText.substring(0, 8);
-        if (!whiteListSide.includes(courseName)) {
-            sideBarCourses[i].remove();
+        for (let i = 0; i < timeToRun; i++) {
+            const courseName = sideBarCourses[i].innerText.substring(0, 8);
+            if (!whiteListSide.includes(courseName)) {
+                sideBarCourses[i].remove();
+            }
         }
     }
 }
